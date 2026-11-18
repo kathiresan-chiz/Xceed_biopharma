@@ -1,0 +1,15 @@
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  background: var(--menu-blue);
+  visibility: hidden;
+  clip-path: inset(100% 0% 0% 0%);
+  pointer-events: none;
+}
+
+.page-curtain__logo {
+  font-size: clamp(36px, 5vw, 72px);
+}

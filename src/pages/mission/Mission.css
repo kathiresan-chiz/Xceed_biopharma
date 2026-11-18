@@ -1,0 +1,664 @@
+/* Mission page — laid out on the 1728 × 1117 Figma frame.
+   --u   scene scale: covers the viewport, but never crops more than ~64 design px a side
+   --uc  contain scale (hero copy)
+   --hs  pure cover scale, top-anchored hero photos and the floating navbar */
+.mission {
+  --hs: max(calc(100vw / 1728), calc(100vh / 1117));
+  --u: min(var(--hs), calc(100vw / 1600));
+  --uc: min(calc(100vw / 1728), calc(100vh / 1117));
+  --navy-text: #253e8f;
+
+  background: #fff;
+  overflow-x: clip;
+}
+
+.ms-box {
+  position: absolute;
+  left: calc(50% - 864 * var(--u));
+  top: calc(50% - 558.5 * var(--u));
+  width: calc(1728 * var(--u));
+  height: calc(1117 * var(--u));
+}
+
+.ms-m-pillars {
+  display: none;
+}
+
+/* ==================================================================
+   Desktop: one pinned, scroll-scrubbed scene
+=================================================================== */
+@media (min-width: 1025px) and (min-aspect-ratio: 5/4) {
+  .ms-stage {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .ms-lavender,
+  .ms-hero,
+  .ms-primacy,
+  .ms-primacy__zoom,
+  .ms-obj,
+  .ms-strat {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ms-lavender {
+    z-index: 2;
+    background: #a2aecb;
+    visibility: hidden;
+  }
+
+  /* Hero ---------------------------------------------------------- */
+  .ms-hero {
+    overflow: hidden;
+    background: #2b2d31;
+  }
+
+  .ms-hero__half {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background-repeat: no-repeat;
+    background-size: calc(1728 * var(--hs)) calc(1117 * var(--hs));
+    will-change: transform;
+  }
+
+  .ms-hero__half--l {
+    left: 0;
+    background-position: calc(50vw - 864 * var(--hs)) 0;
+  }
+
+  .ms-hero__half--r {
+    left: 50%;
+    background-position: calc(-864 * var(--hs)) 0;
+  }
+
+  .ms-hero__title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(50% + (788 - 558.5) * var(--uc));
+    margin: 0;
+    font: 400 calc(64 * var(--uc)) / calc(86 * var(--uc)) 'Playfair Display', Georgia, serif;
+    color: #fff;
+    text-align: center;
+  }
+
+  /* Primacy ------------------------------------------------------- */
+  .ms-primacy {
+    z-index: 2;
+    overflow: hidden;
+    clip-path: inset(0% 50% 0% 50%);
+  }
+
+  .ms-primacy__zoom {
+    background: #eaecf4;
+    will-change: transform;
+  }
+
+  .ms-primacy__bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: center / 100% 100% no-repeat;
+    transform-origin: calc(864.5 * var(--u)) calc(742 * var(--u));
+  }
+
+  /* bg 2 is 1191 tall; shifted so its arcs line up with the split sphere */
+  .ms-primacy__bg--2 {
+    top: calc(-37 * var(--u));
+    height: calc(1191 * var(--u));
+    transform-origin: calc(864.5 * var(--u)) calc(753 * var(--u));
+    opacity: 0;
+  }
+
+  .ms-sphere {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .sp-arc {
+    fill: none;
+    stroke: #4a5160;
+  }
+
+  .sp-glints path {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+  }
+
+  .ms-primacy__title {
+    --ty: 316;
+    --ts: 1;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--ty) * var(--u));
+    margin: 0;
+    font: 400 calc(100 * var(--u)) / 1.25 'Playfair Display', Georgia, serif;
+    color: var(--navy-text);
+    text-align: center;
+    white-space: pre;
+    transform: scale(var(--ts));
+    transform-origin: 50% 0;
+  }
+
+  .ms-primacy__text {
+    position: absolute;
+    left: calc(546 * var(--u));
+    width: calc(600 * var(--u));
+    top: calc(488 * var(--u));
+    margin: 0;
+    font: 400 calc(30 * var(--u)) / calc(38 * var(--u)) 'Roboto', system-ui, sans-serif;
+    color: var(--navy-text);
+    text-align: center;
+  }
+
+  .ms-primacy__text .ln {
+    opacity: 0;
+  }
+
+  /* Defined Objectives ------------------------------------------- */
+  .ms-obj {
+    z-index: 3;
+    overflow: hidden;
+  }
+
+  .ms-obj__media {
+    position: absolute;
+    inset: 0;
+    background: center 40% / cover no-repeat;
+  }
+
+  .ms-obj__shade,
+  .ms-obj__dark {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ms-obj__dark {
+    z-index: 2;
+  }
+
+  .ms-obj__circle {
+    --cx: 1295;
+    --cy: 560;
+    --cr: 400;
+
+    position: absolute;
+    left: calc((var(--cx) - var(--cr)) * var(--u));
+    top: calc((var(--cy) - var(--cr)) * var(--u));
+    width: calc(var(--cr) * 2 * var(--u));
+    height: calc(var(--cr) * 2 * var(--u));
+    border-radius: 50%;
+    background: center / cover no-repeat;
+  }
+
+  .ms-obj__title {
+    --tx: 643;
+    --ty: 546;
+    --ts: 1;
+
+    position: absolute;
+    left: calc(var(--tx) * var(--u));
+    top: calc(var(--ty) * var(--u));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    font: 700 calc(150 * var(--u)) / calc(150 * var(--u)) 'Playfair Display', Georgia, serif;
+    letter-spacing: 0.1em;
+    color: #fff;
+    white-space: nowrap;
+    transform: translate(-50%, -50%) scale(var(--ts));
+  }
+
+  .ms-obj__hline {
+    position: absolute;
+    left: calc(71 * var(--u));
+    width: calc(1586 * var(--u));
+    top: calc(621 * var(--u));
+    height: calc(4 * var(--u));
+    background: #4dbae6;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .ms-obj__vline {
+    position: absolute;
+    top: calc(665 * var(--u));
+    width: calc(4 * var(--u));
+    height: calc(329 * var(--u));
+    background: #4dbae6;
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+
+  .ms-obj__vline--1 {
+    left: calc(606 * var(--u));
+  }
+
+  .ms-obj__vline--2 {
+    left: calc(1120 * var(--u));
+  }
+
+  .ms-obj__col {
+    position: absolute;
+    top: calc(704 * var(--u));
+    margin: 0;
+    font: 400 calc(29.5 * var(--u)) / calc(35 * var(--u)) 'Roboto', system-ui, sans-serif;
+    color: #fff;
+    text-align: justify;
+    text-align-last: left;
+    opacity: 0;
+  }
+
+  .ms-obj__col--1 {
+    left: calc(19 * var(--u));
+    width: calc(555 * var(--u));
+  }
+
+  .ms-obj__col--2 {
+    left: calc(631 * var(--u));
+    width: calc(466 * var(--u));
+  }
+
+  .ms-obj__col--3 {
+    left: calc(1153 * var(--u));
+    width: calc(549 * var(--u));
+  }
+
+  /* Strategy + cards ---------------------------------------------- */
+  .ms-strat {
+    z-index: 4;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .ms-strat__head {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ms-strat__bg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(1728 * var(--u));
+    height: calc(1138 * var(--u));
+    background: center / 100% 100% no-repeat;
+    transform: translate(-50%, calc(-50% - 10 * var(--u)));
+  }
+
+  .ms-strat__title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(146 * var(--u));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    font: 900 calc(234 * var(--u)) / calc(262 * var(--u)) 'Playfair Display', Georgia, serif;
+    letter-spacing: 0.04em;
+    color: #000;
+    white-space: nowrap;
+  }
+
+  .ms-card {
+    position: absolute;
+    left: calc(55 * var(--u));
+    top: calc(640 * var(--u));
+    width: calc(1617 * var(--u));
+    height: calc(398 * var(--u));
+    border-radius: calc(10 * var(--u));
+    background: #fffbf5;
+    box-shadow: 0 0 calc(3 * var(--u)) rgba(0, 0, 0, 0.04);
+  }
+
+  .ms-card__diag {
+    position: absolute;
+    left: calc(62 * var(--u));
+    width: calc(436 * var(--u));
+    top: calc(40 * var(--u));
+    margin: 0;
+    font: 700 calc(33 * var(--u)) / calc(48 * var(--u)) 'Playfair Display', Georgia, serif;
+    color: #000;
+    text-align: center;
+  }
+
+  .ms-card__copy {
+    position: absolute;
+    left: calc(883 * var(--u));
+    top: calc(44 * var(--u));
+    width: calc(649 * var(--u));
+  }
+
+  .ms-card__copy + .ms-card__copy {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .ms-card__copy h3 {
+    margin: 0 0 calc(22 * var(--u));
+    font: 400 calc(32 * var(--u)) / 1.25 'Roboto', system-ui, sans-serif;
+    letter-spacing: 0.01em;
+    color: #000;
+  }
+
+  .ms-card__copy p {
+    margin: 0;
+    font: 300 calc(19 * var(--u)) / calc(30 * var(--u)) 'Roboto', system-ui, sans-serif;
+    letter-spacing: 0.075em;
+    color: #000;
+    text-align: justify;
+    text-align-last: left;
+  }
+
+  .ms-card__copy.is-small p {
+    font-size: calc(16 * var(--u));
+    line-height: calc(24 * var(--u));
+    letter-spacing: 0.06em;
+  }
+
+  .ms-box--cards,
+  .ms-box--shape {
+    pointer-events: none;
+  }
+
+  .ms-box--shape {
+    z-index: 6;
+  }
+
+  /* Over the white sheet the disc inverts whatever passes beneath it */
+  .ms-box--shape.is-blend {
+    mix-blend-mode: difference;
+  }
+
+  .ms-box--shape.is-blend .ms-shape {
+    background: #fff;
+  }
+
+  .ms-shape {
+    --sx: 432;
+    --sy: 490;
+    --sd: 336;
+
+    position: absolute;
+    left: calc((var(--sx) - var(--sd) / 2) * var(--u));
+    top: calc((var(--sy) - var(--sd) / 2) * var(--u));
+    width: calc(var(--sd) * var(--u));
+    height: calc(var(--sd) * var(--u));
+    border-radius: 50%;
+    background: #000;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+}
+
+/* ==================================================================
+   Narrow / portrait: sections stack in normal flow
+=================================================================== */
+@media not all and (min-width: 1025px) and (min-aspect-ratio: 5/4) {
+  .mission {
+    --mu: calc(100vw / 390);
+  }
+
+  .ms-lavender,
+  .ms-shape,
+  .ms-box--shape,
+  .ms-card,
+  .ms-obj__dark {
+    display: none;
+  }
+
+  .ms-box {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    transform: none;
+  }
+
+  /* Hero */
+  .ms-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 100svh;
+    overflow: hidden;
+    background: url('../../assets/mission/hero.jpg') 72% 0 / auto 100% no-repeat #2b2d31;
+  }
+
+  .ms-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent 55%);
+  }
+
+  .ms-hero__half {
+    display: none;
+  }
+
+  .ms-hero .ms-box {
+    z-index: 1;
+    width: 100%;
+    padding: 0 20px 14svh;
+  }
+
+  .ms-hero__title {
+    margin: 0;
+    font: 400 clamp(30px, 9vw, 52px) / 1.3 'Playfair Display', Georgia, serif;
+    color: #fff;
+    text-align: center;
+  }
+
+  /* Primacy */
+  .ms-primacy {
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .ms-primacy__bg {
+    display: none;
+  }
+
+  .ms-primacy .ms-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 90px 20px 70px;
+  }
+
+  .ms-primacy__title {
+    order: -1;
+    margin: 0 0 10px;
+    font: 400 clamp(30px, 8.6vw, 56px) / 1.2 'Playfair Display', Georgia, serif;
+    color: var(--navy-text);
+    text-align: center;
+  }
+
+  .ms-sphere {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1728 / 1117;
+    margin: -8% 0 -4%;
+  }
+
+  .sp-arc {
+    fill: none;
+    stroke: #4a5160;
+  }
+
+  .sp-glints path {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+  }
+
+  .ms-primacy__text {
+    max-width: 34em;
+    margin: 0;
+    font: 400 clamp(16px, 4.3vw, 22px) / 1.5 'Roboto', system-ui, sans-serif;
+    color: var(--navy-text);
+    text-align: center;
+  }
+
+  /* Objectives */
+  .ms-obj {
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .ms-obj__media {
+    position: absolute;
+    inset: 0;
+    background: 30% center / cover no-repeat;
+  }
+
+  .ms-obj__shade {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  .ms-obj .ms-box {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 18px;
+    padding: 80px 20px 70px;
+  }
+
+  .ms-obj__circle {
+    grid-column: 2;
+    grid-row: 1;
+    width: clamp(120px, 34vw, 260px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: center / cover no-repeat;
+  }
+
+  .ms-obj__title {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font: 700 clamp(30px, 9vw, 64px) / 1.05 'Playfair Display', Georgia, serif;
+    letter-spacing: 0.08em;
+  }
+
+  .ms-obj__hline {
+    grid-column: 1 / -1;
+    height: 3px;
+    margin: 18px 0 6px;
+    background: #4dbae6;
+  }
+
+  .ms-obj__vline {
+    display: none;
+  }
+
+  .ms-obj__col {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding-left: 16px;
+    border-left: 3px solid #4dbae6;
+    font: 400 clamp(15px, 4.1vw, 20px) / 1.5 'Roboto', system-ui, sans-serif;
+  }
+
+  /* Strategy */
+  .ms-strat {
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .ms-strat__bg {
+    position: absolute;
+    inset: 0;
+    background: center / cover no-repeat;
+    opacity: 0.8;
+  }
+
+  .ms-strat__head .ms-box {
+    padding: 90px 12px 40px;
+  }
+
+  .ms-strat__title {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    font: 900 clamp(46px, 15vw, 120px) / 1.12 'Playfair Display', Georgia, serif;
+    letter-spacing: 0.02em;
+    color: #000;
+    text-align: center;
+  }
+
+  .ms-box--cards {
+    display: none;
+  }
+
+  .ms-m-pillars {
+    display: grid;
+    gap: 22px;
+    padding: 0 14px 80px;
+    background: #fff;
+  }
+
+  .ms-m-card {
+    display: grid;
+    justify-items: center;
+    gap: 18px;
+    padding: 28px 20px 30px;
+    border-radius: 10px;
+    background: #fffbf5;
+    text-align: center;
+  }
+
+  .ms-m-card .ms-card__diag {
+    margin: 0;
+    font: 700 clamp(20px, 5.6vw, 28px) / 1.4 'Playfair Display', Georgia, serif;
+  }
+
+  .ms-m-card__shape {
+    width: 84px;
+    aspect-ratio: 1;
+    background: #000;
+  }
+
+  .ms-m-card__copy h3 {
+    margin: 0 0 12px;
+    font: 400 clamp(20px, 5.4vw, 26px) / 1.3 'Roboto', system-ui, sans-serif;
+  }
+
+  .ms-m-card__copy p {
+    margin: 0;
+    font: 300 clamp(15px, 4vw, 17px) / 1.7 'Roboto', system-ui, sans-serif;
+    letter-spacing: 0.03em;
+    text-align: justify;
+    text-align-last: center;
+  }
+}

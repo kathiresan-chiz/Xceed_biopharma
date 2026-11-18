@@ -1,0 +1,311 @@
+.footer {
+  --radius: clamp(44px, 7vw, 130px);
+
+  position: relative;
+  z-index: 5;
+  /* Tuck 2px under the pinned Collaborate panel so no sub-pixel seam shows */
+  margin-top: -2px;
+  overflow: hidden;
+  background: var(--collab-blue);
+  color: #fff;
+}
+
+/* Contact card, rounded at the bottom so the link panel appears to sit beneath it */
+.footer__card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(80px, 11svh, 140px) var(--gutter) clamp(56px, 9svh, 110px);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--collab-blue);
+  box-shadow: 0 34px 44px -26px rgba(0, 25, 70, 0.75);
+}
+
+.footer__logo {
+  display: inline-flex;
+  font-size: clamp(40px, 5.5vw, 106px);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+/* Columns sit at x 264 / 788 / 1350 of 1920 in the mockup */
+.footer__grid {
+  display: grid;
+  grid-template-columns: 27.3vw 29.3vw auto;
+  width: 100%;
+  margin-top: clamp(40px, 6svh, 72px);
+  padding-left: calc(13.75vw - var(--gutter));
+}
+
+.footer__col h3 {
+  margin: 0 0 0.9em;
+  font: 500 clamp(18px, 1.65vw, 32px) / 1.2 var(--font-body);
+  color: #e6ecf5;
+}
+
+.footer__col p {
+  margin: 0 0 1.4em;
+  font: 300 clamp(16px, 1.56vw, 30px) / 1.56 var(--font-body);
+}
+
+.footer__col p a {
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.6s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .footer__col p a:hover {
+    background-size: 100% 1px;
+  }
+}
+
+.footer__col--cta {
+  display: flex;
+  align-items: flex-start;
+}
+
+.footer__talk {
+  display: grid;
+  place-items: center;
+  width: clamp(220px, 19vw, 366px);
+  height: clamp(84px, 7.3vw, 140px);
+  border-radius: 18px;
+  background: #fff;
+  color: var(--brand-navy);
+  font: 400 clamp(18px, 1.55vw, 30px) / 1 var(--font-ui);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-shadow: 0 16px 30px -18px rgba(0, 20, 60, 0.8);
+  transition:
+    transform 0.6s var(--ease-out),
+    box-shadow 0.6s var(--ease-out);
+}
+
+.footer__talk span {
+  position: relative;
+  padding-bottom: 0.4em;
+}
+
+.footer__talk span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  transition: transform 0.6s var(--ease-io);
+}
+
+@media (hover: hover) {
+  .footer__talk:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 40px -18px rgba(0, 20, 60, 0.9);
+  }
+
+  .footer__talk:hover span::after {
+    animation: underline-redraw 0.7s var(--ease-io);
+  }
+}
+
+.footer__brands {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px clamp(40px, 6.6vw, 126px);
+  margin-top: clamp(40px, 8svh, 110px);
+  transform: translateX(-5vw);
+}
+
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.05em;
+  font-size: clamp(28px, 3.1vw, 60px);
+}
+
+.footer__brand i {
+  width: 0.86em;
+  height: 0.1em;
+  margin-top: 0.18em;
+  background: #b9c0c9;
+}
+
+/* Link panel underneath */
+.footer__panel {
+  position: relative;
+  z-index: 1;
+  margin-top: calc(var(--radius) * -1);
+  padding: calc(var(--radius) + clamp(40px, 6svh, 80px)) var(--gutter) clamp(56px, 12svh, 140px) 5.94vw;
+}
+
+/* Image x 114-786, links from x 824 (of 1920) */
+.footer__panel-inner {
+  display: grid;
+  grid-template-columns: 35vw max-content;
+  align-items: center;
+  column-gap: 2vw;
+}
+
+.footer__media {
+  margin: 0;
+  aspect-ratio: 1 / 0.98;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -28px rgba(0, 18, 48, 0.75);
+}
+
+.footer__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.footer__nav {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  column-gap: clamp(12px, 1vw, 20px);
+  row-gap: clamp(36px, 16svh, 180px);
+}
+
+.footer__nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__primary {
+  display: contents;
+}
+
+.footer__group-title {
+  margin: 0 0 clamp(14px, 3svh, 52px);
+  padding-left: clamp(24px, 3.45vw, 66px);
+  font: 400 clamp(15px, 1.56vw, 30px) / 1 var(--font-ui);
+  letter-spacing: 0.36em;
+}
+
+.footer__link {
+  display: inline-flex;
+  align-items: center;
+  color: #b7c0cc;
+  font: 500 clamp(28px, 3.96vw, 78px) / 1.4 var(--font-ui);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.4s ease;
+}
+
+.footer__link::before {
+  content: '';
+  flex: none;
+  width: 0.87em;
+  height: 0.1em;
+  min-height: 3px;
+  background: currentColor;
+  transition: width 0.5s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .footer__link:hover {
+    color: #fff;
+  }
+
+  .footer__link:hover::before {
+    width: 1.2em;
+  }
+}
+
+.footer__bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px clamp(14px, 1.4vw, 26px);
+  padding: 18px var(--gutter) calc(18px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  font: 300 clamp(13px, 1.15vw, 22px) / 1.4 var(--font-body);
+  text-align: center;
+}
+
+.footer__bar a {
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.footer__bar a:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    padding: 0;
+  }
+
+  .footer__brands {
+    transform: none;
+  }
+
+  .footer__col--cta {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 860px) {
+  .footer__panel {
+    padding-left: var(--gutter);
+  }
+
+  .footer__panel-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .footer__media {
+    display: none;
+  }
+
+  .footer__nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 40px;
+  }
+
+  .footer__link {
+    font-size: clamp(22px, 4.4vw, 40px);
+  }
+}
+
+@media (max-width: 560px) {
+  .footer__grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .footer__talk {
+    width: 100%;
+  }
+
+  .footer__nav {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+  }
+
+  .footer__primary {
+    display: block;
+  }
+
+  .footer__link {
+    font-size: clamp(26px, 8.4vw, 36px);
+  }
+}

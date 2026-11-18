@@ -1,0 +1,765 @@
+/* KSM & API page — laid out on the mockup's 1920 × 1135 frame.
+   --u   pinned-scene scale: the whole frame stays in view (contain); photos carry a 240 design-px
+         mirrored bleed so they still fill any screen shape. Only beyond that bleed does it crop.
+   --bl  that bleed, in px */
+.ksm {
+  --u: max(min(calc(100vw / 1920), calc(100vh / 1135)), calc(100vw / 2400), calc(100vh / 1615));
+  --bl: calc(240 * var(--u));
+  --ks-bg: #e8e9f3;
+  --ks-ink: #33479a;
+  --ks-sage: #9bb5af;
+  --ks-navy: #233b8e;
+  --ks-olive: #323d29;
+  --ks-note: #50557c;
+
+  background: var(--ks-bg);
+  color: var(--ks-ink);
+  overflow-x: clip;
+}
+
+.ksm p,
+.ksm h1,
+.ksm h2,
+.ksm h3 {
+  margin: 0;
+}
+
+/* flex parents keep the rows' negative margins from collapsing */
+.ksm :has(> .ln--mask) {
+  display: flex;
+  flex-direction: column;
+}
+
+.ksm .ln--mask {
+  display: block;
+  overflow: hidden;
+  /* room for ascenders/descenders inside the clipped row */
+  padding: 0.1em 0 0.24em;
+  margin: -0.1em 0 -0.24em;
+}
+
+.ksm .ln--mask > span {
+  display: block;
+}
+
+/* Olive cards (both layouts) */
+.ks-card {
+  background: var(--ks-olive);
+  color: #ecece4;
+  text-align: center;
+  border-radius: calc(14 * var(--u));
+}
+
+.ks-card p + p {
+  margin-top: 1lh;
+}
+
+.ks-read {
+  display: inline-flex;
+  align-items: center;
+  background: #239353;
+  color: #e9f4ec;
+  border-radius: 999px;
+  text-decoration: none;
+  transition:
+    background-color 0.35s ease,
+    transform 0.5s var(--ease-out),
+    box-shadow 0.5s var(--ease-out);
+}
+
+.ks-read__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.ks-read__icon svg {
+  width: 62%;
+  height: 62%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ks-read__label {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+@media (hover: hover) {
+  .ks-read:hover {
+    background: #1f8549;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px -14px rgba(0, 0, 0, 0.7);
+  }
+
+  .ks-read:hover .ks-read__icon {
+    transform: translateX(4px);
+  }
+}
+
+/* Blue risk panel copy (both layouts) */
+.ks-rp {
+  background: var(--ks-navy);
+  color: #e3e7f4;
+}
+
+.ks-rp__num {
+  font-family: var(--font-body);
+  font-weight: 100;
+  color: #cfd5ee;
+}
+
+.ks-rp__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: #f4f5fb;
+  letter-spacing: 0.075em;
+}
+
+.ks-rp__intro {
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 300;
+  letter-spacing: 0.068em;
+}
+
+.ks-rp__col {
+  font-family: var(--font-body);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+
+.ks-m {
+  display: none;
+}
+
+/* ==================================================================
+   Desktop: one pinned, scroll-scrubbed scene
+=================================================================== */
+@media (min-width: 1025px) and (min-aspect-ratio: 5/4) {
+  .ks-stage {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--ks-bg);
+  }
+
+  .ks-box {
+    position: absolute;
+    left: calc(50% - 960 * var(--u));
+    top: calc(50% - 567.5 * var(--u));
+    width: calc(1920 * var(--u));
+    height: calc(1135 * var(--u));
+  }
+
+  .ks-box .ln {
+    display: block;
+    white-space: nowrap;
+  }
+
+  /* Hero ---------------------------------------------------------- */
+  .ks-hero {
+    --tx: 0;
+    --ti: 0;
+    --ty: 0;
+    --cy: 0;
+    --ws: 1;
+    --is: 1;
+
+    position: absolute;
+    inset: 0;
+    transform-origin: calc(960 * var(--u)) calc(150 * var(--u));
+    will-change: transform;
+  }
+
+  .ks-title {
+    position: absolute;
+    z-index: 1;
+    left: calc(194.5 * var(--u));
+    top: calc(395 * var(--u));
+    font: 400 calc(112.2 * var(--u)) / calc(150 * var(--u)) var(--font-display);
+    color: var(--ks-ink);
+    white-space: nowrap;
+    transform: translate(calc(var(--tx) * var(--u)), calc((var(--ty) + var(--ti)) * var(--u)));
+    will-change: transform;
+  }
+
+  /* The stepped window: sage ground + crystal, cut to the cross shape */
+  .ks-window {
+    position: absolute;
+    z-index: 2;
+    left: calc(657.2 * var(--u));
+    top: calc(256.7 * var(--u));
+    width: calc(1096.6 * var(--u));
+    height: calc(692.3 * var(--u));
+    overflow: hidden;
+    background: var(--ks-sage);
+    transform: translateY(calc(var(--cy) * var(--u)));
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1096.6 692.3' preserveAspectRatio='none'%3E%3Cpath d='M294.9 0H812.8A18 18 0 0 1 830.8 18V91.2A14 14 0 0 0 844.8 105.2H1078.6A18 18 0 0 1 1096.6 123.2V535.8A18 18 0 0 1 1078.6 553.8H748.8A14 14 0 0 0 734.8 567.8V674.3A18 18 0 0 1 716.8 692.3H376.2A18 18 0 0 1 358.2 674.3V567.8A14 14 0 0 0 344.2 553.8H18A18 18 0 0 1 0 535.8V123.2A18 18 0 0 1 18 105.2H262.9A14 14 0 0 0 276.9 91.2V18A18 18 0 0 1 294.9 0Z'/%3E%3C/svg%3E")
+      center / calc(100% * var(--ws)) calc(100% * var(--ws)) no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1096.6 692.3' preserveAspectRatio='none'%3E%3Cpath d='M294.9 0H812.8A18 18 0 0 1 830.8 18V91.2A14 14 0 0 0 844.8 105.2H1078.6A18 18 0 0 1 1096.6 123.2V535.8A18 18 0 0 1 1078.6 553.8H748.8A14 14 0 0 0 734.8 567.8V674.3A18 18 0 0 1 716.8 692.3H376.2A18 18 0 0 1 358.2 674.3V567.8A14 14 0 0 0 344.2 553.8H18A18 18 0 0 1 0 535.8V123.2A18 18 0 0 1 18 105.2H262.9A14 14 0 0 0 276.9 91.2V18A18 18 0 0 1 294.9 0Z'/%3E%3C/svg%3E")
+      center / calc(100% * var(--ws)) calc(100% * var(--ws)) no-repeat;
+    will-change: transform, mask-size;
+  }
+
+  .ks-window__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    transform: scale(var(--is));
+    user-select: none;
+  }
+
+  /* White copy of the title, seen only through the window */
+  .ks-title--white {
+    left: calc((194.5 - 657.2) * var(--u));
+    top: calc((395 - 256.7) * var(--u));
+    color: #fbfbfe;
+    transform: translate(calc(var(--tx) * var(--u)), calc((var(--ty) + var(--ti) - var(--cy)) * var(--u)));
+  }
+
+  /* Outlined notes, clipped to the content column while they slide in */
+  .ks-boxes {
+    position: absolute;
+    z-index: 3;
+    left: calc(170 * var(--u));
+    top: calc(792 * var(--u));
+    width: calc(1617 * var(--u));
+    height: calc(240 * var(--u));
+    overflow: hidden;
+  }
+
+  .ks-boxes__track {
+    --bx: 1620;
+
+    position: absolute;
+    inset: 0;
+    transform: translateX(calc(var(--bx) * var(--u)));
+    will-change: transform;
+  }
+
+  .ks-note {
+    position: absolute;
+    top: calc(7 * var(--u));
+    width: calc(730 * var(--u));
+    height: calc(226 * var(--u));
+    border: calc(1.3 * var(--u)) solid #a9acc4;
+    border-radius: calc(12 * var(--u));
+    color: var(--ks-note);
+    text-align: center;
+    font: 300 calc(23 * var(--u)) / calc(34.6 * var(--u)) var(--font-body);
+    letter-spacing: 0.058em;
+  }
+
+  .ks-note p {
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
+  .ks-note--1 {
+    left: calc(4 * var(--u));
+  }
+
+  .ks-note--1 p {
+    top: calc(0.5 * var(--u));
+  }
+
+  .ks-note--2 {
+    left: calc(883 * var(--u));
+  }
+
+  .ks-note--2 p {
+    top: calc(19.5 * var(--u));
+  }
+
+  /* Blue statement panel */
+  .ks-hpanel {
+    --py: 800;
+
+    position: absolute;
+    z-index: 4;
+    left: calc(128 * var(--u));
+    top: calc(687 * var(--u));
+    width: calc(1675 * var(--u));
+    height: calc(431 * var(--u));
+    border-radius: calc(32 * var(--u));
+    background: var(--ks-navy);
+    color: #eef0f8;
+    text-align: center;
+    font: 300 calc(23 * var(--u)) / calc(34.6 * var(--u)) var(--font-body);
+    letter-spacing: 0.058em;
+    transform: translateY(calc(var(--py) * var(--u)));
+    will-change: transform;
+  }
+
+  .ks-hpanel__col {
+    position: absolute;
+    top: calc(97 * var(--u));
+  }
+
+  .ks-hpanel__col--1 {
+    left: calc((569.5 - 128 - 420) * var(--u));
+    width: calc(840 * var(--u));
+  }
+
+  .ks-hpanel__col--2 {
+    left: calc((1384 - 128 - 420) * var(--u));
+    width: calc(840 * var(--u));
+  }
+
+  .ks-hpanel__rule {
+    position: absolute;
+    left: calc((965 - 128) * var(--u));
+    top: calc(79 * var(--u));
+    width: calc(2.4 * var(--u));
+    height: calc(276 * var(--u));
+    background: #e8ebf6;
+  }
+
+  /* Over Concentration of Production ------------------------------- */
+  /* Scenes wipe up from the bottom; --wipe 1 → hidden, 0 → shown (bleed included) */
+  .ks-conc,
+  .ks-risk,
+  .ks-slide {
+    --wipe: 1;
+
+    position: absolute;
+    inset: 0;
+    clip-path: inset(
+      calc(var(--wipe) * (100% + 2 * var(--bl)) - var(--bl)) calc(-1 * var(--bl)) calc(-1 * var(--bl))
+        calc(-1 * var(--bl))
+    );
+  }
+
+  .ks-conc {
+    z-index: 5;
+  }
+
+  .ks-conc__bg,
+  .ks-slide__bg {
+    position: absolute;
+    left: calc(-1 * var(--bl));
+    top: calc(-1 * var(--bl));
+    width: calc(100% + 2 * var(--bl));
+    height: calc(100% + 2 * var(--bl));
+    max-width: none;
+    user-select: none;
+  }
+
+  .ks-conc__bg {
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  .ks-conc__title {
+    position: absolute;
+    z-index: 2;
+    left: calc((449.5 - 500) * var(--u));
+    top: calc(118 * var(--u));
+    width: calc(1000 * var(--u));
+    font: 400 calc(70 * var(--u)) / calc(88 * var(--u)) var(--font-display);
+    letter-spacing: 0.019em;
+    text-align: center;
+    color: #fbfbf8;
+  }
+
+  .ks-card {
+    --cy: 900;
+    --cs: 1;
+
+    position: absolute;
+    z-index: 3;
+    left: calc(1130 * var(--u));
+    top: calc(490 * var(--u));
+    width: calc(625 * var(--u));
+    height: calc(450 * var(--u));
+    font: 300 calc(24.5 * var(--u)) / calc(38.4 * var(--u)) var(--font-body);
+    letter-spacing: 0.078em;
+    transform-origin: 50% 0;
+    transform: translateY(calc(var(--cy) * var(--u))) scale(var(--cs));
+    will-change: transform;
+  }
+
+  .ks-card--1 {
+    padding-top: calc(63.5 * var(--u));
+  }
+
+  .ks-card--2 {
+    z-index: 4;
+    padding-top: calc(25 * var(--u));
+  }
+
+  .ks-card--3 {
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: calc(108 * var(--u));
+  }
+
+  .ks-card__lead {
+    font: 300 calc(33 * var(--u)) / calc(52 * var(--u)) var(--font-body);
+    letter-spacing: 0.07em;
+  }
+
+  .ks-card--3 .ks-read {
+    gap: 0;
+    width: calc(342 * var(--u));
+    height: calc(86 * var(--u));
+    margin-top: calc(88 * var(--u));
+    padding: calc(13 * var(--u)) calc(18 * var(--u));
+  }
+
+  .ks-card--3 .ks-read__icon {
+    width: calc(56 * var(--u));
+    height: calc(56 * var(--u));
+  }
+
+  .ks-card--3 .ks-read__label {
+    padding-right: calc(30 * var(--u));
+    font-size: calc(21 * var(--u));
+  }
+
+  /* Risk Mitigation via Strategic Diversification ----------------- */
+  .ks-risk {
+    z-index: 6;
+  }
+
+  .ks-slide--1 {
+    --wipe: 0;
+  }
+
+  .ks-risk__title {
+    position: absolute;
+    z-index: 5;
+    left: calc((437.5 - 500) * var(--u));
+    top: calc(330.8 * var(--u));
+    width: calc(1000 * var(--u));
+    font: 400 calc(67 * var(--u)) / calc(102.5 * var(--u)) var(--font-display);
+    letter-spacing: 0.036em;
+    text-align: center;
+    color: #fbfbf8;
+    visibility: hidden;
+  }
+
+  .ks-rp {
+    --py: 1200;
+
+    position: absolute;
+    left: calc(889 * var(--u));
+    top: calc(196 * var(--u));
+    right: calc(-1 * var(--bl));
+    bottom: calc(-1 * var(--bl));
+    transform: translateY(calc(var(--py) * var(--u)));
+    will-change: transform;
+  }
+
+  .ks-slide--2 .ks-rp,
+  .ks-slide--3 .ks-rp {
+    left: calc(884.5 * var(--u));
+    top: calc(187.5 * var(--u));
+  }
+
+  .ks-rp__item {
+    position: absolute;
+  }
+
+  .ks-rp__intro {
+    font-size: calc(25 * var(--u));
+    line-height: calc(38.5 * var(--u));
+  }
+
+  .ks-rp__num {
+    font-size: calc(73 * var(--u));
+    line-height: 1;
+  }
+
+  .ks-rp__title {
+    font-size: calc(33 * var(--u));
+    line-height: 1.2;
+  }
+
+  .ks-rp__col {
+    font-size: calc(21.5 * var(--u));
+    line-height: calc(32.2 * var(--u));
+  }
+
+  /* Justified columns that keep the mockup's line breaks; last line centred */
+  .ks-rp__col .ln {
+    text-align: justify;
+    text-align-last: justify;
+  }
+
+  .ks-rp__col .ln:last-child {
+    text-align-last: center;
+  }
+
+  /* Slide 1 · Multimodal approach (positions relative to the panel) */
+  .ks-slide--1 .ks-rp__intro {
+    left: calc((1421 - 889 - 480) * var(--u));
+    top: calc((304 - 196 - 10.5) * var(--u));
+    width: calc(960 * var(--u));
+  }
+
+  .ks-slide--1 .ks-rp__num {
+    left: calc((950 - 889 - 4) * var(--u));
+    top: calc((466 - 196 - 10) * var(--u));
+  }
+
+  .ks-slide--1 .ks-rp__title {
+    left: calc((951 - 889) * var(--u));
+    top: calc((578 - 196 - 11) * var(--u));
+  }
+
+  .ks-slide--1 .ks-rp__col:first-child {
+    left: calc((951 - 889) * var(--u));
+    top: calc((700 - 196 - 9) * var(--u));
+    width: calc(411 * var(--u));
+  }
+
+  .ks-slide--1 .ks-rp__col:last-child {
+    left: calc((1455 - 889) * var(--u));
+    top: calc((700 - 196 - 9) * var(--u));
+    width: calc(427 * var(--u));
+  }
+
+  /* Slide 2 · Need for Innovation */
+  .ks-slide--2 .ks-rp__num {
+    left: calc((978 - 884.5 - 4) * var(--u));
+    top: calc((275 - 187.5 - 10) * var(--u));
+  }
+
+  .ks-slide--2 .ks-rp__title {
+    left: calc((961 - 884.5) * var(--u));
+    top: calc((410 - 187.5 - 11) * var(--u));
+  }
+
+  .ks-slide--2 .ks-rp__intro {
+    left: calc((1411.5 - 884.5 - 480) * var(--u));
+    top: calc((538 - 187.5 - 9) * var(--u));
+    width: calc(960 * var(--u));
+    font-size: calc(21.5 * var(--u));
+    line-height: calc(32 * var(--u));
+    letter-spacing: 0.051em;
+  }
+
+  .ks-slide--2 .ks-rp__col:first-child {
+    left: calc((960 - 884.5) * var(--u));
+    top: calc((816 - 187.5 - 9) * var(--u));
+    width: calc(394 * var(--u));
+  }
+
+  .ks-slide--2 .ks-rp__col:last-child {
+    left: calc((1454 - 884.5) * var(--u));
+    top: calc((816 - 187.5 - 9) * var(--u));
+    width: calc(393 * var(--u));
+  }
+
+  /* Slide 3 · Globally Developed Portfolio */
+  .ks-slide--3 .ks-rp__num {
+    left: calc((957 - 884.5 - 4) * var(--u));
+    top: calc((278 - 187.5 - 10) * var(--u));
+  }
+
+  .ks-slide--3 .ks-rp__title {
+    left: calc((956 - 884.5) * var(--u));
+    top: calc((437 - 187.5 - 11) * var(--u));
+  }
+
+  .ks-slide--3 .ks-rp__col:first-child {
+    left: calc((957 - 884.5) * var(--u));
+    top: calc((767 - 187.5 - 9) * var(--u));
+    width: calc(400 * var(--u));
+  }
+
+  .ks-slide--3 .ks-rp__col:last-child {
+    left: calc((1418 - 884.5) * var(--u));
+    top: calc((767 - 187.5 - 9) * var(--u));
+    width: calc(443 * var(--u));
+  }
+}
+
+/* ==================================================================
+   Phone / portrait: the same story, stacked
+=================================================================== */
+@media not all and (min-width: 1025px) and (min-aspect-ratio: 5/4) {
+  .ks-wrap {
+    display: none;
+  }
+
+  .ks-m {
+    display: block;
+  }
+
+  .ks-m-hero {
+    padding: clamp(120px, 18vw, 170px) var(--gutter) 70px;
+  }
+
+  .ks-m-hero__title {
+    font: 400 clamp(40px, 9vw, 76px) / 1.25 var(--font-display);
+    color: var(--ks-ink);
+  }
+
+  .ks-m-window {
+    width: min(100%, 640px);
+    aspect-ratio: 1096.6 / 692.3;
+    margin: 34px 0 40px auto;
+    background: var(--ks-sage);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1096.6 692.3' preserveAspectRatio='none'%3E%3Cpath d='M294.9 0H812.8A18 18 0 0 1 830.8 18V91.2A14 14 0 0 0 844.8 105.2H1078.6A18 18 0 0 1 1096.6 123.2V535.8A18 18 0 0 1 1078.6 553.8H748.8A14 14 0 0 0 734.8 567.8V674.3A18 18 0 0 1 716.8 692.3H376.2A18 18 0 0 1 358.2 674.3V567.8A14 14 0 0 0 344.2 553.8H18A18 18 0 0 1 0 535.8V123.2A18 18 0 0 1 18 105.2H262.9A14 14 0 0 0 276.9 91.2V18A18 18 0 0 1 294.9 0Z'/%3E%3C/svg%3E")
+      center / 100% 100% no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1096.6 692.3' preserveAspectRatio='none'%3E%3Cpath d='M294.9 0H812.8A18 18 0 0 1 830.8 18V91.2A14 14 0 0 0 844.8 105.2H1078.6A18 18 0 0 1 1096.6 123.2V535.8A18 18 0 0 1 1078.6 553.8H748.8A14 14 0 0 0 734.8 567.8V674.3A18 18 0 0 1 716.8 692.3H376.2A18 18 0 0 1 358.2 674.3V567.8A14 14 0 0 0 344.2 553.8H18A18 18 0 0 1 0 535.8V123.2A18 18 0 0 1 18 105.2H262.9A14 14 0 0 0 276.9 91.2V18A18 18 0 0 1 294.9 0Z'/%3E%3C/svg%3E")
+      center / 100% 100% no-repeat;
+  }
+
+  .ks-m-window img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ks-m-hero .ks-note {
+    margin-top: 18px;
+    padding: 22px 20px;
+    border: 1px solid #a9acc4;
+    border-radius: 12px;
+    color: var(--ks-note);
+    text-align: center;
+    font: 300 16px / 1.6 var(--font-body);
+    letter-spacing: 0.02em;
+  }
+
+  .ks-m-panel {
+    display: grid;
+    gap: 22px;
+    margin-top: 28px;
+    padding: 34px 24px;
+    border-radius: 22px;
+    background: var(--ks-navy);
+    color: #eef0f8;
+    text-align: center;
+    font: 300 16px / 1.6 var(--font-body);
+    letter-spacing: 0.02em;
+  }
+
+  .ks-m-conc {
+    display: grid;
+    gap: 18px;
+    padding: 80px var(--gutter) 90px;
+    background: #2b3a3a center / cover no-repeat;
+  }
+
+  .ks-m .ks-m-conc__title {
+    margin-bottom: 30vw;
+    font: 400 clamp(32px, 7.4vw, 60px) / 1.25 var(--font-display);
+    text-align: center;
+    color: #fbfbf8;
+  }
+
+  .ks-m-conc .ks-card {
+    width: min(100%, 520px);
+    margin-left: auto;
+    padding: 30px 24px;
+    font: 300 16px / 1.6 var(--font-body);
+    letter-spacing: 0.02em;
+  }
+
+  .ks-m-conc .ks-card--nikkei {
+    display: grid;
+    justify-items: center;
+    gap: 26px;
+  }
+
+  .ks-m-conc .ks-card__lead {
+    font: 300 20px / 1.5 var(--font-body);
+  }
+
+  .ks-m-conc .ks-read {
+    width: 230px;
+    height: 58px;
+    padding: 8px 12px;
+  }
+
+  .ks-m-conc .ks-read__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ks-m-conc .ks-read__label {
+    padding-right: 20px;
+    font-size: 16px;
+  }
+
+  .ks-m-risk__head {
+    display: grid;
+    place-items: center;
+    min-height: 72svh;
+    padding: 100px var(--gutter);
+    background: #2c2b22 center / cover no-repeat;
+  }
+
+  .ks-m-risk__title {
+    font: 400 clamp(32px, 7.4vw, 60px) / 1.4 var(--font-display);
+    text-align: center;
+    color: #fbfbf8;
+  }
+
+  .ks-m-slide__img {
+    height: 46svh;
+    background: center / cover no-repeat;
+  }
+
+  .ks-m-slide .ks-rp {
+    display: grid;
+    gap: 16px;
+    padding: 44px var(--gutter) 54px;
+  }
+
+  .ks-m-slide .ks-rp__intro {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .ks-m-slide .ks-rp__num {
+    margin-top: 6px;
+    font-size: 54px;
+    line-height: 1;
+  }
+
+  .ks-m-slide .ks-rp__title {
+    font-size: clamp(24px, 5vw, 34px);
+    line-height: 1.25;
+  }
+
+  .ks-m-slide .ks-rp__cols {
+    display: grid;
+    gap: 16px;
+  }
+
+  .ks-m-slide .ks-rp__col {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  @media (min-width: 700px) {
+    .ks-m-slide .ks-rp__col {
+      text-align: justify;
+    }
+
+    .ks-m-slide .ks-rp__cols {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+  }
+}

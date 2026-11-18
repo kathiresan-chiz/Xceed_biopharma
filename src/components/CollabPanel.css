@@ -1,0 +1,249 @@
+/* Blue "Let's Talk" band shared by the Mission and Vision pages (1728-wide Figma frame) */
+.cp {
+  --cu: min(calc(100vw / 1728), 1px);
+
+  position: relative;
+  z-index: 1;
+  height: calc(916 * var(--cu));
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--collab-blue);
+  color: #fff;
+}
+
+.cp__strips {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  aspect-ratio: 840 / 916;
+}
+
+/* The two photo strips, split along the 45° blue gap (bent above the lower strip's top edge) */
+.cp__strip {
+  position: absolute;
+  inset: 0;
+  background: left top / 100% 100% no-repeat;
+  will-change: transform;
+}
+
+.cp__strip--a {
+  clip-path: polygon(0 0, 100% 0, 100% 43.9%, 61.1% 43.9%, 0 99.95%);
+}
+
+.cp__strip--b {
+  clip-path: polygon(0 99.95%, 61.1% 43.9%, 100% 43.9%, 100% 100%, 0 100%);
+}
+
+.cp__text {
+  position: absolute;
+  left: calc(840 * var(--cu));
+  right: calc(106 * var(--cu));
+  top: calc(262 * var(--cu));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cp__text p {
+  margin: 0 0 calc(40 * var(--cu));
+  font: 400 max(18px, calc(32 * var(--cu))) / 1.25 'Roboto', system-ui, sans-serif;
+  letter-spacing: 0.035em;
+}
+
+.cp__btn {
+  display: grid;
+  place-items: center;
+  width: max(130px, calc(156 * var(--cu)));
+  height: max(48px, calc(60 * var(--cu)));
+  margin-top: calc(46 * var(--cu));
+  border-radius: calc(6 * var(--cu));
+  background: #fff;
+  color: #253e8f;
+  font: 400 max(13px, calc(14 * var(--cu))) / 1 'Roboto', system-ui, sans-serif;
+  text-decoration: none;
+  transition:
+    transform 0.5s var(--ease-out),
+    box-shadow 0.5s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .cp__btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 26px -12px rgba(0, 20, 60, 0.7);
+  }
+}
+
+/* Narrow / portrait: strips above, copy below */
+@media not all and (min-width: 1025px) and (min-aspect-ratio: 5/4) {
+  .cp {
+    height: auto;
+    min-height: 0;
+    padding-bottom: 70px;
+  }
+
+  .cp__strips {
+    position: relative;
+    width: min(100%, 420px);
+    height: auto;
+    bottom: auto;
+  }
+
+  .cp__text {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    padding: 30px 20px 0;
+  }
+
+  .cp__text p {
+    margin-bottom: 18px;
+  }
+
+  .cp__btn {
+    margin-top: 16px;
+    border-radius: 6px;
+  }
+}
+
+/* ---------- variant="home": the homepage band (Home.css .collab), as a standalone pinned section ---------- */
+.cp--home {
+  height: 100vh;
+  height: 100svh;
+}
+
+.cp--home .cp__strips {
+  aspect-ratio: 900 / 1080;
+}
+
+.cp--home .cp__strip {
+  background-size: cover;
+  background-position: center;
+}
+
+.cp--home .cp__strip--a {
+  clip-path: polygon(0 0, 100% 0, 100% 14%, 0 96.6%);
+}
+
+.cp--home .cp__strip--b {
+  clip-path: polygon(0 96.6%, 100% 14%, 100% 100%, 0 100%);
+}
+
+.cp--home .cp__text {
+  top: 0;
+  bottom: 0;
+  left: max(51.8vw, calc(83.3svh + 2vw));
+  right: 8.1vw;
+  padding-top: 8svh;
+  justify-content: center;
+}
+
+.cp--home .cp__text p {
+  margin: 0 0 1.9em;
+  font: 400 min(1.85vw, 3.4svh) / 1.25 var(--font-body);
+  letter-spacing: 0.04em;
+}
+
+.cp--home .cp__btn {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin-top: 6.5svh;
+  padding: 0.38em 0.65em;
+  border-radius: 6px;
+  color: #2a3a8a;
+  font: 400 min(2.08vw, 3.8svh) / 1.2 var(--font-body);
+  box-shadow: 0 8px 18px -8px rgba(0, 20, 60, 0.6);
+}
+
+@media not all and (min-width: 1025px) and (min-aspect-ratio: 5/4) {
+  .cp--home {
+    height: auto;
+  }
+
+  .cp--home .cp__strips {
+    position: relative;
+    width: min(100%, 420px);
+  }
+
+  .cp--home .cp__text {
+    left: auto;
+    right: auto;
+    padding: 30px 6vw 0;
+  }
+
+  .cp--home .cp__text p {
+    margin-bottom: 1.1em;
+    font-size: clamp(16px, 2.6vw, 24px);
+  }
+
+  .cp--home .cp__btn {
+    margin-top: 2svh;
+    font-size: clamp(16px, 2.6vw, 24px);
+  }
+}
+
+/* ---------- title: the KSM & API band (“Let’s Collaborate” heading above the copy) ---------- */
+.cp__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+@media (min-width: 1025px) and (min-aspect-ratio: 5/4) {
+  .cp--titled {
+    /* the mockup's 1920 × 1135 frame */
+    --ku: min(calc(100vw / 1920), calc(100svh / 1135));
+  }
+
+  .cp--titled .cp__text {
+    left: calc(50% + 40 * var(--ku));
+    right: auto;
+    top: calc(50% - (567.5 - 234) * var(--ku));
+    bottom: auto;
+    width: calc(816 * var(--ku));
+    padding: 0;
+    justify-content: flex-start;
+  }
+
+  .cp--titled .cp__title {
+    position: relative;
+    left: calc(-12.5 * var(--ku));
+    font-size: calc(67.5 * var(--ku));
+    line-height: calc(90 * var(--ku));
+    letter-spacing: 0.086em;
+    margin-bottom: calc(68.4 * var(--ku));
+  }
+
+  .cp--titled .cp__text p {
+    margin: 0 0 calc(53 * var(--ku));
+    font: 400 calc(33 * var(--ku)) / calc(42 * var(--ku)) var(--font-body);
+    letter-spacing: 0.073em;
+  }
+
+  .cp--titled .cp__text p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .cp--titled .cp__btn {
+    position: relative;
+    left: calc(6.5 * var(--ku));
+    display: grid;
+    width: calc(272 * var(--ku));
+    height: calc(78 * var(--ku));
+    margin-top: calc(250.6 * var(--ku));
+    padding: 0;
+    border-radius: calc(6 * var(--ku));
+    font: 400 calc(36 * var(--ku)) / 1 var(--font-body);
+  }
+}
+
+@media not all and (min-width: 1025px) and (min-aspect-ratio: 5/4) {
+  .cp--titled .cp__title {
+    margin-bottom: 0.6em;
+    font-size: clamp(30px, 6vw, 48px);
+    letter-spacing: 0.04em;
+  }
+}

@@ -1,0 +1,237 @@
+/* Preloader, measured from the mockup at 1920 × 1080 */
+.preloader {
+  --sh: min(43.75vw, 77.8svh); /* wave footage height (1920 × 840 source) */
+  --bar-h: max(44px, 7.7svh);
+
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  background: radial-gradient(ellipse 62% 58% at 50% 68%, #ecebe9 0%, #f5f5f4 72%);
+}
+
+/* Wave footage (with the logo) sits on a cover-fitted frame so the logo veil stays aligned */
+.preloader__stage {
+  position: absolute;
+  top: 5.56svh;
+  left: 0;
+  right: 0;
+  height: var(--sh);
+  overflow: hidden;
+}
+
+.preloader__wave,
+.preloader__logo-veil {
+  position: absolute;
+}
+
+.preloader__wave {
+  left: 50%;
+  top: 0;
+  width: max(100%, calc(var(--sh) * 2.2857));
+  height: 100%;
+  object-fit: cover;
+  transform: translateX(-50%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 3%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 3%, #000 93%, transparent 100%);
+}
+
+/* Logo box within the footage: x 742–1178, y 43–187 of 1920 × 840 */
+.preloader__logo-veil {
+  left: calc(50% + (0.376 - 0.5) * max(100%, calc(var(--sh) * 2.2857)));
+  top: 3.5%;
+  width: calc(0.248 * max(100%, calc(var(--sh) * 2.2857)));
+  height: 20.5%;
+  border-radius: 40px;
+  background: #f5f5f4;
+  filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Progress */
+.preloader__progress {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  transition:
+    opacity 0.5s ease,
+    transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.preloader__count {
+  position: absolute;
+  bottom: calc(var(--bar-h) + 2svh);
+  left: clamp(1.25em, calc(var(--p) * 100%), calc(100% - 1.2em));
+  transform: translateX(-50%);
+  font: 400 clamp(34px, 4.6vw, 88px) / 1 'Roboto', system-ui, sans-serif;
+  color: #6c7278;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.preloader__track {
+  height: var(--bar-h);
+  overflow: hidden;
+  background: #b0b4b8;
+  transition: background 0.3s ease;
+}
+
+.preloader__bar {
+  height: 100%;
+  background: #6a737a;
+  transform-origin: left;
+  transition: background 0.3s ease;
+}
+
+.preloader.is-complete .preloader__track,
+.preloader.is-complete .preloader__bar {
+  background: #9da2a8;
+}
+
+.preloader--ready .preloader__progress,
+.preloader--exiting .preloader__progress {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+/* Continue button */
+.preloader__continue {
+  position: absolute;
+  left: 50%;
+  bottom: 6svh;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 0.9vw, 17px);
+  height: clamp(56px, 7.4svh, 80px);
+  padding: 0 clamp(24px, 2vw, 39px) 0 clamp(9px, 0.9vw, 17px);
+  border: 0;
+  border-radius: 999px;
+  background: #6c7278;
+  color: #fff;
+  font: 400 clamp(16px, 1.25vw, 24px) / 1 'Barlow', system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 16px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.preloader__continue:hover {
+  background: #5a6066;
+}
+
+.preloader__continue:focus-visible {
+  outline: 2px solid #4a4a50;
+  outline-offset: 3px;
+}
+
+.preloader__continue-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: clamp(36px, 2.5vw, 48px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  transition: transform 0.3s ease;
+}
+
+.preloader__continue:hover .preloader__continue-icon {
+  transform: translateX(3px);
+}
+
+.preloader__continue-icon svg {
+  width: 62%;
+  height: 62%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.preloader--ready .preloader__continue {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+  transition-delay: 0.35s, 0.35s, 0s;
+}
+
+/* Exit: logo and button fade, a centre line draws, then the panel opens to full width */
+.preloader__split {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 3;
+  width: 2px;
+  background: var(--hero-bg);
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
+}
+
+.preloader__reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: var(--hero-bg);
+  clip-path: inset(0 50% 0 50%);
+}
+
+.preloader--exiting .preloader__logo-veil {
+  opacity: 1;
+}
+
+.preloader--exiting .preloader__continue {
+  opacity: 0;
+  transform: translate(-50%, 0);
+  transition-duration: 0.45s;
+}
+
+.preloader--exiting .preloader__split {
+  animation: split-line 0.25s ease-in 0.42s forwards;
+}
+
+.preloader--exiting .preloader__reveal {
+  animation: reveal-open 1.65s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.6s forwards;
+}
+
+@keyframes split-line {
+  to {
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
+@keyframes reveal-open {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Portrait screens: crop the footage to its centre so the logo and wave stay large */
+@media (max-width: 1024px) and (orientation: portrait) {
+  .preloader {
+    --sh: 54svh;
+  }
+
+  .preloader__stage {
+    top: 9svh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader--exiting .preloader__split,
+  .preloader--exiting .preloader__reveal {
+    animation-duration: 0.01s;
+    animation-delay: 0s;
+  }
+}
